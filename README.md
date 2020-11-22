@@ -42,6 +42,8 @@ To configure and publish a resume, you will need:
 
 The template does not rely on any particular CSS framework, fonts, or images. There are some basic styles in the `head` of the HTML file that can be changed, so feel free to adapt and add to these to match your site and story brand.
 
+![example resume screen capture](assets/maryammirzakhani.gif)
+
 ## Getting Started
 
 - Download this repository as a ZIP file using the button above, and unzip it. If you are using `git`, clone this repository.
