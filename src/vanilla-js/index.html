@@ -2,7 +2,7 @@
 <html>
 <head>
     <meta charset='utf-8' />
-    <title>Scrollytelling Template</title>
+    <title>Interactive Resume</title>
     <meta name='viewport' content='initial-scale=1,maximum-scale=1,user-scalable=no' />
     <script src='https://api.tiles.mapbox.com/mapbox-gl-js/v1.5.0/mapbox-gl.js'></script>
     <link href='https://api.tiles.mapbox.com/mapbox-gl-js/v1.5.0/mapbox-gl.css' rel='stylesheet' />
@@ -10,15 +10,15 @@
     <script src="https://unpkg.com/scrollama"></script>
     <style>
         body {
-            margin:0; 
-            padding:0; 
+            margin:0;
+            padding:0;
             font-family: sans-serif;
         }
         a, a:hover, a:visited {
-            color: #0071bc;
+            color: #54bbff;
         }
         #map {
-            top:0; 
+            top:0;
             height: 100vh;
             width:100vw;
             position: fixed;
@@ -27,7 +27,9 @@
         #header {
             margin: 3vh auto;
             width: 90vw;
-            padding: 2vh;
+            padding-top: 2vh;
+            padding-left: 2vh;
+            padding-bottom: 2vh;
             text-align: center;
         }
         #footer {
@@ -44,25 +46,53 @@
             padding-bottom: 10vh;
             z-index: 100;
         }
-        .centered {
-            width: 50vw;
-            margin: 0 auto;
-        }
         .lefty {
             width: 33vw;
-            margin-left: 5vw;
+            margin-left: 2vw;
+        }
+        .lefty.small {
+          width: 33vw;
+          margin-left: 2vw;
+        }
+        .lefty.medium {
+          width: 50vw;
+          margin-left: 2vw;
+        }
+        .lefty.large {
+          width: 66vw;
+          margin-left: 2vw;
+        }
+        .lefty.full {
+          width: 92vw;
+          margin-left: 2vw;
         }
         .righty {
             width: 33vw;
-            margin-left: 62vw;
+            margin-left: 31vw;
+        }
+        .righty.small {
+            width: 33vw;
+            margin-left: 31vw;
+        }
+        .righty.medium {
+            width: 50vw;
+            margin-left: 14vw;
+        }
+        .righty.large {
+            width: 66vw;
+            margin-left: -2vw;
+        }
+        .righty.full {
+            width: 90vw;
+            margin-left: -26vw;
         }
         .light {
-            color: #444;
-            background-color: #fafafa;
+            color: #fafafa;
+            background-color: #777;
         }
         .dark {
-            color: #fafafa;
-            background-color: #444;
+            color: #444;
+            background-color: #e3e3e3;
         }
         .step {
             padding-bottom: 50vh;
@@ -75,8 +105,8 @@
 
         .step div {
             padding:  25px 50px;
-            line-height: 25px;
-            font-size: 13px;
+            line-height: 20px;
+            font-size: 1em;
         }
 
         .step img {
@@ -91,7 +121,7 @@
         }
 
         /* Fix issue on mobile browser where scroll breaks  */
-        .mapboxgl-canvas-container.mapboxgl-touch-zoom-rotate.mapboxgl-touch-drag-pan, 
+        .mapboxgl-canvas-container.mapboxgl-touch-zoom-rotate.mapboxgl-touch-drag-pan,
         .mapboxgl-canvas-container.mapboxgl-touch-zoom-rotate.mapboxgl-touch-drag-pan .mapboxgl-canvas {
             touch-action: unset;
         }
@@ -104,6 +134,10 @@
 <div id="story"></div>
 <script src="./config.js"></script>
 <script>
+var mapStyleLight = 'mapbox://styles/mapbox/light-v10';
+var mapStyleDark = 'mapbox://styles/mapbox/dark-v10';
+var mapStyle = ((config.theme === 'light') ?  mapStyleLight : mapStyleDark);
+
 var layerTypes = {
     'fill': ['fill-opacity'],
     'line': ['line-opacity'],
@@ -115,8 +149,14 @@ var layerTypes = {
 
 var alignments = {
     'left': 'lefty',
-    'center': 'centered',
     'right': 'righty'
+}
+
+var containerSizes = {
+    'small': 'small',
+    'medium': 'medium',
+    'large': 'large',
+    'full': 'full'
 }
 
 function getLayerPaintType(layer) {
@@ -165,19 +205,49 @@ if (header.innerText.length > 0) {
 config.chapters.forEach((record, idx) => {
     var container = document.createElement('div');
     var chapter = document.createElement('div');
-    
+
+    container.classList.add(alignments[config.alignment]);
+
+    if (record.width) {
+        container.classList.add(containerSizes[record.width]);
+    }
+
     if (record.title) {
         var title = document.createElement('h3');
         title.innerText = record.title;
         chapter.appendChild(title);
     }
-    
+
     if (record.image) {
-        var image = new Image();  
-        image.src = record.image;  
-        chapter.appendChild(image);
+        if (typeof record.image === 'string') {
+          var image = new Image();
+          image.src = record.image;
+          chapter.appendChild(image);
+      } else {
+        var tbl = document.createElement('table');
+        var tbdy = document.createElement('tbody');
+        var tr1 = document.createElement('tr');
+        var tr2 = document.createElement('tr');
+        record.image.forEach(img => {
+          var tdImage = document.createElement('td');
+          var image = new Image();
+          image.src = img.path;
+          tdImage.appendChild(image);
+          tdImage.style.verticalAlign = 'center';
+          tr1.appendChild(tdImage);
+          var tdDesc = document.createElement('td');
+          tdDesc.innerHTML = img.desc;
+          tdDesc.style.textAlign = 'center';
+          tdDesc.style.verticalAlign = 'top';
+          tr2.appendChild(tdDesc);
+        });
+        tbdy.appendChild(tr1);
+        tbdy.appendChild(tr2);
+        tbl.appendChild(tbdy);
+        chapter.appendChild(tbl);
+      }
     }
-    
+
     if (record.description) {
         var story = document.createElement('p');
         story.innerHTML = record.description;
@@ -214,16 +284,16 @@ if (footer.innerText.length > 0) {
 mapboxgl.accessToken = config.accessToken;
 
 const transformRequest = (url) => {
-    const hasQuery = url.indexOf("?") !== -1;	  
-    const suffix = hasQuery ? "&pluginName=journalismScrollytelling" : "?pluginName=journalismScrollytelling";	  
+    const hasQuery = url.indexOf("?") !== -1;
+    const suffix = hasQuery ? "&pluginName=journalismScrollytelling" : "?pluginName=journalismScrollytelling";
     return {
       url: url + suffix
-    }	  
+    }
 }
 
 var map = new mapboxgl.Map({
     container: 'map',
-    style: config.style,
+    style: mapStyle,
     center: config.chapters[0].location.center,
     zoom: config.chapters[0].location.zoom,
     bearing: config.chapters[0].location.bearing,
@@ -270,6 +340,9 @@ map.on("load", function() {
 
 // setup resize event
 window.addEventListener('resize', scroller.resize);
+
+// set title of HTML document
+document.title = config.documentTitle;
 
 </script>
 
