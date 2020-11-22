@@ -19,7 +19,10 @@ Optionally, you can input a custom Mapbox Style with layers styled in Studio and
 
 The output is an HTML and JavaScript file. These outputs can be hosted on any web-accessible location, with no extra code or infrastructure required. Note that embedding the output as an iFrame in another page will not work as expected. The scroll-driven interface requires the full page.
 
-This repository is based on (and was forked from) the [Mapbox Storytelling](https://github.com/mapbox/storytelling).
+This repository is based on (and was forked from) the [Mapbox Storytelling](https://github.com/mapbox/storytelling). Our main contributions are:
+- More flexible width of the chapter containers (small, medium, large and full width).
+- Support of multiple images in one container.
+- Minor changes to theme styling.
 
 ## Prerequisites
 No coding experience is required. If you are planning to include some custom map layers, you will need some familiarity with [Mapbox Studio](https://studio.mapbox.com).
