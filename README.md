@@ -23,6 +23,7 @@ This repository is based on (and was forked from) the [Mapbox Storytelling](http
 - More flexible width of the chapter containers (small, medium, large and full width).
 - Support of multiple images in one container.
 - Optional user message explaining the scroll.
+- Mobile friendly version.
 - Minor changes to theme styling.
 
 ## Prerequisites

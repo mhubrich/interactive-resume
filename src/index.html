@@ -31,13 +31,19 @@
             padding-bottom: 2vh;
             text-align: center;
         }
+        #header.mobile {
+            margin: 0;
+            width: 100%;
+            padding-top: 1vh;
+            padding-bottom: 1vh;
+        }
         #footer {
             width: 100%;
             min-height: 5vh;
-            padding-top: 2vh;
-            padding-bottom: 2vh;
+            padding-top: 1vh;
+            padding-bottom: 1vh;
             text-align: center;
-            line-height: 25px;
+            line-height: 20px;
             font-size: 1em;
         }
         #features {
@@ -115,15 +121,12 @@
             font-size: 1em;
         }
 
-        .step img {
-            width: 100%;
+        .step.mobile div {
+            padding: 5px 10px;
         }
 
-        @media (max-width: 750px) {
-            #features {
-                width: 90vw;
-                margin: 0 auto;
-            }
+        .step img {
+            width: 100%;
         }
 
         /* Fix issue on mobile browser where scroll breaks  */
@@ -140,6 +143,9 @@
 <div id="story"></div>
 <script src="./config.js"></script>
 <script>
+// checks if document is opened on a mobile device
+// source: https://dev.to/timhuang/a-simple-way-to-detect-if-browser-is-on-a-mobile-device-with-javascript-44j3
+var isMobile = /Android|webOS|iPhone|iPad|iPod|BlackBerry|IEMobile|Opera Mini|Windows Phone/i.test(navigator.userAgent);
 var mapStyleLight = 'mapbox://styles/mapbox/light-v10';
 var mapStyleDark = 'mapbox://styles/mapbox/dark-v10';
 var mapStyle = ((config.theme === 'light') ?  mapStyleLight : mapStyleDark);
@@ -158,11 +164,12 @@ var alignments = {
     'right': 'righty'
 }
 
+// always use 'full' if on mobile
 var containerSizes = {
-    'small': 'small',
-    'medium': 'medium',
-    'large': 'large',
-    'full': 'full'
+    'small': ((isMobile === true) ? 'full' : 'small'),
+    'medium': ((isMobile === true) ? 'full' : 'medium'),
+    'large': ((isMobile === true) ? 'full' : 'large'),
+    'full': ((isMobile === true) ? 'full' : 'full')
 }
 
 function getLayerPaintType(layer) {
@@ -209,6 +216,9 @@ if (config.byline) {
 if (header.innerText.length > 0) {
     header.classList.add(config.theme);
     header.setAttribute('id', 'header');
+    if (isMobile === true) {
+        header.classList.add('mobile');
+    }
     story.appendChild(header);
 }
 
@@ -216,6 +226,9 @@ if (config.scrollMessage) {
     var dialog = document.createElement('div');
     dialog.classList.add(config.theme);
     dialog.classList.add(alignments[config.alignment]);
+    if (isMobile === true) {
+        dialog.classList.add('full');
+    }
     dialog.innerText = config.scrollMessage;
     dialog.setAttribute('id', 'dialog');
     window.addEventListener('scroll', hideDialog);
@@ -276,6 +289,9 @@ config.chapters.forEach((record, idx) => {
 
     container.setAttribute('id', record.id);
     container.classList.add('step');
+    if (isMobile === true) {
+        container.classList.add('mobile');
+    }
     if (idx === 0) {
         container.classList.add('active');
     }
