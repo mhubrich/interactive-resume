@@ -22,6 +22,7 @@ The output is an HTML and JavaScript file. These outputs can be hosted on any we
 This repository is based on (and was forked from) the [Mapbox Storytelling](https://github.com/mapbox/storytelling). Our main contributions are:
 - More flexible width of the chapter containers (small, medium, large and full width).
 - Support of multiple images in one container.
+- Optional user message explaining the scroll.
 - Minor changes to theme styling.
 
 ## Prerequisites
@@ -38,9 +39,9 @@ To configure and publish a resume, you will need:
 
 - Attention to detail. The configuration file does require specific syntax and punctuation. Braces, brackets, commas, and quotes are important. Follow the `config.js.template` for guidance. Some familiarity with [JSON]('https://www.copterlabs.com/json-what-it-is-how-it-works-how-to-use-it/') is recommended.
 
-- Optionally, some spatial data in your Mapbox map. The template has options to include layer names to show and hide the data as the story sections transition. You may want to highlight a neighborhood, or show satellite data from two different times.
+- Optionally, some spatial data in your Mapbox map. The template has options to include layer names to show and hide the data as the resume sections transition. You may want to highlight a neighborhood, or show satellite data from two different times.
 
-The template does not rely on any particular CSS framework, fonts, or images. There are some basic styles in the `head` of the HTML file that can be changed, so feel free to adapt and add to these to match your site and story brand.
+The template does not rely on any particular CSS framework, fonts, or images. There are some basic styles in the `head` of the HTML file that can be changed, so feel free to adapt and add to these to match your site and resume brand.
 
 ![example resume screen capture](assets/maryammirzakhani.gif)
 
@@ -50,7 +51,7 @@ The template does not rely on any particular CSS framework, fonts, or images. Th
 
 ### Vanilla JS
 
-In your local copy of this repository (the unzipped file you downloaded), navigate to the `src/vanilla-js/` directory.
+In your local copy of this repository (the unzipped file you downloaded), navigate to the `src/` directory.
 
 Make a copy of `config.js.template` and name it `config.js`. Open the new `config.js` file in your text editor.
 
@@ -62,17 +63,19 @@ Make a copy of `config.js.template` and name it `config.js`. Open the new `confi
 
 3. **Choose a theme for the resume**. There are `light` and `dark` options.
 
-4. **Choose where your story should be aligned over the map**. Options are `left` or `right`.
+4. **Choose where your resume should be aligned over the map**. Options are `left` or `right`.
 
 ```
 {
     accessToken: 'YOUR_ACCESS_TOKEN',
     showMarkers: false,
+    theme: 'light',
     alignment: 'left',
     documentTitle: 'The title of the HTML document',
     title: 'Resume Title Goes Here',
     subtitle: 'A subtitle going into more detail goes here',
     byline: 'Your name',
+    scrollMessage: 'Scroll down to continue',
     footer: 'Could be a link to your website or LinkedIn profile',
     chapters: [...]
   }
@@ -138,14 +141,16 @@ Note: items in bold are **required**.
 
 `byline`: Credit the author of the resume. (Optional)
 
+`scrollMessage`: A message displayed between header and first section. This message vanishes as soon as the first scroll event is initiated. (Optional)
+
 `footer`: Citations, credits, etc. that will be displayed at the bottom of the resume.
 
-**`chapters`**: This contains all of the resume content and map controls for each section of the story. _Array of objects_
+**`chapters`**: This contains all of the resume content and map controls for each section of the resume. _Array of objects_
 
-- **`id`**: A slug-style ID for the chapter. This is read by the JavaScript driving the app and is assigned as an HTML `id` for the `div` element containing the rest of the story. A best-practice format would be to use kebab case, like `my-resume-chapter-1`.
+- **`id`**: A slug-style ID for the chapter. This is read by the JavaScript driving the app and is assigned as an HTML `id` for the `div` element containing the rest of the resume. A best-practice format would be to use kebab case, like `my-resume-chapter-1`.
 - `title`: The title of the section, displayed in an `h3` element.
 - `image`: The path to an image to display in this section. For multiple images (side by side) you can add a list of dictionaries: `[{path: image1.jpg, desc: 'First Description'}, {path: image2.jpg, desc: 'Second Description'}]`.
-- `description`: The main story content for the section. This should be aligned with what the reader is seeing on the map. In the vanilla version, this field will render as HTML. Images, links, and other items can be included as HTML.
+- `description`: The main resume content for the section. This should be aligned with what the reader is seeing on the map. In the vanilla version, this field will render as HTML. Images, links, and other items can be included as HTML.
 - `width`: The width of the section. Can be any of `small`, `medium`, `large`, `full` (default will be `small`).
 - **`location`**: Details about the map display and camera view.
     - **`center`**: Center coordinates of the map, as `longitude, latitude`

@@ -7,6 +7,7 @@ var config = {
     title: 'From being a Math Olympiad to winning the Fields Medal',
     subtitle: 'The amazing journey of Maryam Mirzakhani',
     // byline: 'Maryam Mirzakhani',
+    scrollMessage: 'Scroll down to continue',
     footer: "Citation: <a href='https://en.wikipedia.org/wiki/Maryam_Mirzakhani'>Wikipedia</a>",
     chapters: [
         {
